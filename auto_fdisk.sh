@@ -13,6 +13,7 @@ RGB_WARNING='\033[33;1m'
 RGB_INFO='\033[36;1m'
 RGB_END='\033[0m'
 
+TENCENTCLOUD=$( wget -qO- -t1 -T2 metadata.tencentyun.com )
 LOCK=/tmp/spacepack_fdisk.log
 
 tool_info() {
@@ -59,7 +60,7 @@ fdisk_centos() {
 }
 
 fdisk_mkfs() {
-fdisk -S 56 $1 << EOF
+fdisk $1 << EOF
 n
 p
 1
@@ -69,7 +70,8 @@ wq
 EOF
 
 sleep 3
-mkfs.ext4 ${1}1
+partprobe
+mkfs -t ext4 ${1}1
 }
 
 fdisk_mounted() {
@@ -158,10 +160,16 @@ fdisk_main() {
     done
     echo -e "\n${RGB_INFO}6/6 : Write the configuration to /etc/fstab and mount the device${RGB_END}"
     echo -en "${RGB_WAIT}Writing...${RGB_END}"
-    echo ${DISK}1 $MOUNT 'ext4 defaults 0 0' >> /etc/fstab
+    if [ ! -z "${TENCENTCLOUD}" ]; then
+    SDISK=$( echo ${DISK} | grep -o "/dev/.*vd[b-z]" | awk -F"/" '{print $(NF)}' )
+    SOFTLINK=$( ls -l /dev/disk/by-id | grep "${SDISK}1" | awk -F" " '{print $(NF-2)}' )
+    echo /dev/disk/by-id/${SOFTLINK} $MOUNT 'ext4 defaults 0 2' >> /etc/fstab
+    else
+    echo ${DISK}1 $MOUNT 'ext4 defaults 0 2' >> /etc/fstab
+    fi
     echo -e "\r${RGB_SUCCESS}Success, the /etc/fstab has been written!${RGB_END}"
     echo -e "\n${RGB_WARNING}Show the amount of free disk space on the system${RGB_END}"
-    df -h
+    df -Th
     echo -e "\n${RGB_WARNING}Show the configuration file for /etc/fstab${RGB_END}"
     cat /etc/fstab
 }
