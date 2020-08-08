@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author:       Seaton Jiang <seaton@vtrois.com>
-# Github URL:   https://github.com/Vtrois/SpacePack
+# Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
@@ -16,7 +16,7 @@ RGB_END='\033[0m'
 tool_info() {
     echo -e "========================================================================================="
     echo -e "                             System Info tool for SpacePack                              "
-    echo -e "          For more information please visit https://github.com/Vtrois/SpacePack          "
+    echo -e "          For more information please visit https://github.com/vtrois/spacepack          "
     echo -e "========================================================================================="
 }
 

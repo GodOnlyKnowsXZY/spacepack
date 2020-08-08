@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author:       Seaton Jiang <seaton@vtrois.com>
-# Github URL:   https://github.com/Vtrois/SpacePack
+# Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
@@ -16,12 +16,12 @@ RGB_END='\033[0m'
 PASSWORD=$( cat /dev/urandom | head -n 10 | md5sum | head -c 10 )
 ETH=$( route | grep default | awk '{print $NF}' )
 TENCENTCLOUD=$( wget -qO- -t1 -T2 metadata.tencentyun.com )
-LOCK=/tmp/sp_pptp.log
+LOCK=/tmp/spacepack_pptp.log
 
 tool_info() {
     echo -e "========================================================================================="
     echo -e "                                 PPTP tool for SpacePack                                 "
-    echo -e "          For more information please visit https://github.com/Vtrois/SpacePack          "
+    echo -e "          For more information please visit https://github.com/vtrois/spacepack          "
     echo -e "========================================================================================="
 }
 
@@ -36,7 +36,7 @@ show_help() {
     echo -e "  -m,  --mod              modify the user password."
     echo -e "  -v,  --version          show the version info."
     echo -e "  -h,  --help             print this help."
-    echo -e "\nMail bug reports and suggestions to <seaton@vtrois.com>."
+    echo -e "\nMail bug reports and suggestions to <support@vtrois.com>."
 }
 
 version() {
@@ -196,7 +196,7 @@ require-mschap-v2
 require-mppe-128
 ms-dns 119.29.29.29
 ms-dns 223.5.5.5
-ms-dns 8.8.8.8
+ms-dns 1.1.1.1
 proxyarp
 lock
 nobsdcomp 

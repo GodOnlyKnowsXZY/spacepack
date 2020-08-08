@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author:       Seaton Jiang <seaton@vtrois.com>
-# Github URL:   https://github.com/Vtrois/SpacePack
+# Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
@@ -13,12 +13,12 @@ RGB_WARNING='\033[33;1m'
 RGB_INFO='\033[36;1m'
 RGB_END='\033[0m'
 
-LOCK=/tmp/sp_fdisk.log
+LOCK=/tmp/spacepack_fdisk.log
 
 tool_info() {
     echo -e "========================================================================================="
     echo -e "                              Auto fdisk tool for SpacePack                              "
-    echo -e "          For more information please visit https://github.com/Vtrois/SpacePack          "
+    echo -e "          For more information please visit https://github.com/vtrois/spacepack          "
     echo -e "========================================================================================="
 }
 

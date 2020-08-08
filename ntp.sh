@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Author:       Seaton Jiang <seaton@vtrois.com>
-# Github URL:   https://github.com/Vtrois/SpacePack
+# Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
@@ -14,12 +14,12 @@ RGB_INFO='\033[36;1m'
 RGB_END='\033[0m'
 
 TENCENTCLOUD=$( wget -qO- -t1 -T2 metadata.tencentyun.com )
-LOCK=/tmp/sp_ntp.log
+LOCK=/tmp/spacepack_ntp.log
 
 tool_info() {
     echo -e "========================================================================================="
     echo -e "                                 NTP server for SpacePack                                "
-    echo -e "          For more information please visit https://github.com/Vtrois/SpacePack          "
+    echo -e "          For more information please visit https://github.com/vtrois/spacepack          "
     echo -e "========================================================================================="
 }
 
