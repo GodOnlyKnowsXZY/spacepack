@@ -3,6 +3,7 @@
 # Author:       Seaton Jiang <seaton@vtrois.com>
 # Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
+# Date:         2020-08-10
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
@@ -26,14 +27,14 @@ operation_system() {
     [ -f /etc/lsb-release ] && awk -F'[="]+' '/DESCRIPTION/{print $2}' /etc/lsb-release && return
 }
 
-public_ip() {
+public_ipv4() {
     local IP=$( wget -qO- -t1 -T2 ipv4.icanhazip.com )
     [ -z ${IP} ] && IP=$( wget -qO- -t1 -T2 ipinfo.io/ip)
     [ ! -z "${IP}" ] && echo ${IP} || echo -e "${RGB_DANGER}Unknown${RGB_END}"
 }
 
-tencent_cloud() {
-    PUBLICIP=$( wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/public-ipv4 )
+metadata_tencent() {
+    IPV4=$( wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/public-ipv4 )
     LOCALIP=$( wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/local-ipv4 )
     MACADDRESS=$( wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/mac )
     INSTANCEID=$( wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/instance-id )
@@ -43,6 +44,17 @@ tencent_cloud() {
     CHARGETYPE=$( wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/payment/charge-type )
     CREATETIME=$( wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/payment/create-time )
     TERMINATIONTIME=$( wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/payment/termination-time )
+}
+
+metadata_ali(){
+    IPV4=$( wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/eipv4 )
+    LOCALIP=$( wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/private-ipv4 )
+    MACADDRESS=$( wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/mac )
+    INSTANCEID=$( wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/instance-id )
+    INSTANCENAME=$( wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/hostname )
+    INSTANCETYPE=$( wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/instance/instance-type )
+    UUID=$( wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/serial-number )
+    REGIONZONE=$( wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/zone-id )
 }
 
 MEMTOTAL=$( cat /proc/meminfo | grep "MemTotal" | awk -F" " '{total=$2/1000}{printf("%d MB",total)}' )
@@ -57,12 +69,18 @@ SYSOS=$( operation_system )
 SYSRISC=$( uname -m )
 SYSLBIT=$( getconf LONG_BIT )
 KERNEVERSIONL=$( cat /proc/version | awk -F" " '{print $3}' )
+IPV6=$( ifconfig | grep "inet6" | grep -v "fe80\|::1" | awk -F" " '{print $2}' )
 NAMESERVER=$( cat /etc/resolv.conf | awk '/^nameserver/{print $2}' | awk 'BEGIN{FS="\n";RS="";ORS=""}{for(x=1;x<=NF;x++){print $x"\t"} print "\n"}' )
+
 TENCENTCLOUD=$( wget -qO- -t1 -T2 metadata.tencentyun.com )
+ALICLOUD=$( wget -qO- -t1 -T2 100.100.100.200 )
+
 if [ ! -z "${TENCENTCLOUD}" ]; then
-tencent_cloud
+metadata_tencent
+elif [ ! -z "${ALICLOUD}" ]; then
+metadata_ali
 else
-PUBLICIP=$( public_ip )
+IPV4=$( public_ipv4 )
 LOCALIP=$( ifconfig | grep "inet" | grep -v "127.0" | xargs | awk -F '[ :]' '{print $2}' )
 MACADDRESS=$( ifconfig | grep "ether" | awk -F" " '{print $2}' )
 fi
@@ -80,7 +98,10 @@ echo -e "${RGB_INFO}CPU Basic Frequency    ${RGB_END}: ${CPUMHZ}"
 echo -e "${RGB_INFO}Total amount of Memory ${RGB_END}: ${MEMTOTAL} (${MEMFREE} Free)"
 echo -e "${RGB_INFO}Total amount of Swap   ${RGB_END}: ${SWAPTOTAL} (${SWAPFREE} Free)"
 echo -e "\n${RGB_WARNING}Network Overview (Contains the DNS, IP address and Nameserver)${RGB_END}"
-echo -e "${RGB_INFO}Public IP              ${RGB_END}: ${PUBLICIP}"
+echo -e "${RGB_INFO}IPV4                   ${RGB_END}: ${IPV4}"
+if [ ! -z "${IPV6}" ]; then
+echo -e "${RGB_INFO}IPV6                   ${RGB_END}: ${IPV6}"
+fi
 echo -e "${RGB_INFO}Local IP               ${RGB_END}: ${LOCALIP}"
 echo -e "${RGB_INFO}MAC Address            ${RGB_END}: ${MACADDRESS}"
 echo -e "${RGB_INFO}Nameserver             ${RGB_END}: ${NAMESERVER}"
@@ -93,4 +114,11 @@ echo -e "${RGB_INFO}Region & Zone          ${RGB_END}: ${REGIONZONE}"
 echo -e "${RGB_INFO}Charge Type            ${RGB_END}: ${CHARGETYPE}"
 echo -e "${RGB_INFO}Create Time            ${RGB_END}: ${CREATETIME}"
 echo -e "${RGB_INFO}Termination Time       ${RGB_END}: ${TERMINATIONTIME}"
+elif [ ! -z "${ALICLOUD}" ]; then
+echo -e "\n${RGB_WARNING}AliCloud Overview (Contains the UUID, Instance and Zone)${RGB_END}"
+echo -e "${RGB_INFO}UUID                   ${RGB_END}: ${UUID}"
+echo -e "${RGB_INFO}Instance ID            ${RGB_END}: ${INSTANCEID}"
+echo -e "${RGB_INFO}Instance Name          ${RGB_END}: ${INSTANCENAME}"
+echo -e "${RGB_INFO}Instance Type          ${RGB_END}: ${INSTANCETYPE}"
+echo -e "${RGB_INFO}Region & Zone          ${RGB_END}: ${REGIONZONE}"
 fi
