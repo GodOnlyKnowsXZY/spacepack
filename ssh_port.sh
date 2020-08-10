@@ -3,6 +3,7 @@
 # Author:       Seaton Jiang <seaton@vtrois.com>
 # Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
+# Date:         2020-08-10
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
@@ -33,7 +34,7 @@ show_help() {
 }
 
 version() {
-  echo "Revise SSH port tool version 1.1"
+  echo "Revise SSH port tool version 1.2"
 }
 
 check_root(){
@@ -111,7 +112,7 @@ change_port() {
         check_os
         echo -e "\r${RGB_SUCCESS}Success, the SSH service restart completed!${RGB_END}\n"
         echo -e "${RGB_WARNING}Please enable [TCP:${NPORT}] for firewalld/iptables manually set if necessary!${RGB_END}\n"
-        echo -e "${RGB_WARNING}If you use Tencent Cloud or other, please enable [TCP:${NPORT}] for SecurityGroup!${RGB_END}"
+        echo -e "${RGB_WARNING}If you use Elastic Compute Service, please enable [TCP:${NPORT}] for SecurityGroup!${RGB_END}"
     else
         echo -e "${RGB_DANGER}Can not find the sshd configfile!${RGB_END}"
         exit 1
