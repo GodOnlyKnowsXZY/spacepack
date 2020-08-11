@@ -3,7 +3,7 @@
 # Author:       Seaton Jiang <seaton@vtrois.com>
 # Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
-# Date:         2020-08-10
+# Date:         2020-08-11
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
@@ -13,6 +13,9 @@ RGB_SUCCESS='\033[32m'
 RGB_WARNING='\033[33;1m'
 RGB_INFO='\033[36;1m'
 RGB_END='\033[0m'
+
+TENCENTCLOUD=$( wget -qO- -t1 -T2 metadata.tencentyun.com )
+ALICLOUD=$( wget -qO- -t1 -T2 100.100.100.200 )
 
 LOCK=/tmp/spacepack_port.log
 
@@ -34,7 +37,7 @@ show_help() {
 }
 
 version() {
-  echo "Revise SSH port tool version 1.2"
+  echo "Revise SSH port tool version 1.3"
 }
 
 check_root(){
@@ -112,7 +115,15 @@ change_port() {
         check_os
         echo -e "\r${RGB_SUCCESS}Success, the SSH service restart completed!${RGB_END}\n"
         echo -e "${RGB_WARNING}Please enable [TCP:${NPORT}] for firewalld/iptables manually set if necessary!${RGB_END}\n"
-        echo -e "${RGB_WARNING}If you use Elastic Compute Service, please enable [TCP:${NPORT}] for SecurityGroup!${RGB_END}"
+        if [ ! -z "${TENCENTCLOUD}" ]; then
+        echo -e "${RGB_WARNING}Detects that you are using Tencent Cloud, please enable [TCP:${NPORT}] in the security group!${RGB_END}\n"
+        echo -e "${RGB_WARNING}Tencent Cloud Console URL:${RGB_END} https://console.cloud.tencent.com/cvm/securitygroup\n"
+        elif [ ! -z "${ALICLOUD}" ]; then
+        echo -e "${RGB_WARNING}Detects that you are using AliCloud, please enable [TCP:${NPORT}] in the security group!${RGB_END}\n"
+        echo -e "${RGB_WARNING}AliCloud Console URL:${RGB_END} https://ecs.console.aliyun.com/#/securityGroup/region/\n"
+        else
+        echo -e "${RGB_WARNING}If you use elastic compute service, please enable [TCP:${NPORT}] for the security group!${RGB_END}"
+        fi
     else
         echo -e "${RGB_DANGER}Can not find the sshd configfile!${RGB_END}"
         exit 1
