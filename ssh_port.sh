@@ -3,7 +3,7 @@
 # Author:       Seaton Jiang <seaton@vtrois.com>
 # Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
-# Date:         2020-08-11
+# Date:         2020-08-12
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
@@ -42,7 +42,7 @@ version() {
 
 check_root(){
     if [[ $EUID -ne 0 ]]; then
-       echo -e "${RGB_DANGER}The script must be run as root!${RGB_END}"
+       echo -e "${RGB_DANGER}This script must be run as root!${RGB_END}"
        exit 1
     fi
 }
