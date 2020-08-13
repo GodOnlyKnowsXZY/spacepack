@@ -3,7 +3,7 @@
 # Author:       Seaton Jiang <seaton@vtrois.com>
 # Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
-# Date:         2020-08-12
+# Date:         2020-08-13
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
@@ -125,7 +125,7 @@ change_port() {
         echo -e "${RGB_WARNING}If you use elastic compute service, please enable [TCP:${NPORT}] for the security group!${RGB_END}"
         fi
     else
-        echo -e "${RGB_DANGER}Can not find the sshd configfile!${RGB_END}"
+        echo -e "${RGB_DANGER}Can't find sshd config file!${RGB_END}"
         exit 1
     fi
 }
