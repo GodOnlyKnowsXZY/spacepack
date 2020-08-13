@@ -17,7 +17,7 @@ RGB_END='\033[0m'
 TENCENTCLOUD=$( wget -qO- -t1 -T2 metadata.tencentyun.com )
 ALICLOUD=$( wget -qO- -t1 -T2 100.100.100.200 )
 
-LOCK=/tmp/spacepack_port.log
+LOCK=/var/log/spacepack_port.log
 
 tool_info() {
     echo -e "========================================================================================="

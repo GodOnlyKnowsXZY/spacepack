@@ -3,7 +3,7 @@
 # Author:       Seaton Jiang <seaton@vtrois.com>
 # Github URL:   https://github.com/vtrois/spacepack
 # License:      MIT
-# Date:         2020-08-12
+# Date:         2020-08-13
 
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
@@ -15,7 +15,7 @@ RGB_INFO='\033[36;1m'
 RGB_END='\033[0m'
 
 TENCENTCLOUD=$( wget -qO- -t1 -T2 metadata.tencentyun.com )
-LOCK=/tmp/spacepack_fdisk.log
+LOCK=/var/log/spacepack_fdisk.log
 
 tool_info() {
     echo -e "========================================================================================="
